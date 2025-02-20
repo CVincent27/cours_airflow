@@ -1,21 +1,3 @@
-![Ada, la seule formation qui vous forme à la stack data](images/ada.jpeg "Cours Airflow Ada")
-
-Pour rejoindre notre formation, direction notre plateforme [Ada](https://www.ada-study.com)
-
-# Cours Airflow
-Dans ce cours, nous vous proposons d'apprendre l'un des logiciels de source ouverte les
-plus utilisés dans le monde de l'ingéniérie des données. En effet, Airflow, un logiciel qui
-permet d'orchestrer les _pipelines_ de données a été créé par Airbnb en 2014 et a connu depuis
-un succès fulgurant et a été donné à la fondation Apache. Aujourd'hui, il existe trés peu
-de rôles pou _data engineer_ ou _analytics engineer_ qui ne demandent pas au moins une 
-expérience avec cet outil, malgrés ses nombreux défauts.
-
-## Programme du cours
-Pour rendre ce cours le plus pratique possible, on vous propose d'apprendre à utiliser Airflow
-en construisant un _pipeline_ de données qui ressemblera à là à ceci
-
-![Dag final](images/dag_final.png "Dag final du cours")
-
 # Mise en place de l'environnement de travail
 1. Clonez ou créez un fork de ce repo pour pouvoir travailler dessus directement
 2. Installer Docker et Docker compose. Si vous n'êtes pas encore familier avec ces outils,
