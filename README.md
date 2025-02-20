@@ -1,3 +1,5 @@
+https://www.udemy.com/course/introduction-a-airflow-pour-la-data-2024/
+
 # Mise en place de l'environnement de travail
 1. Clonez ou créez un fork de ce repo pour pouvoir travailler dessus directement
 2. Installer Docker et Docker compose. Si vous n'êtes pas encore familier avec ces outils,
