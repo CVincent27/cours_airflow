@@ -5,3 +5,4 @@ veng/
 videos/
 __pycache__
 bdd_airflow
+dags/data/data.json
