@@ -58,12 +58,44 @@ def load_from_file(data_file_name):
         if conn:
             conn.close()   
 
+@task
+def check_row_numbers():
+    conn = None
+    nbr_rows = 0
+    try:
+        conn = duckdb.connect('dags/data/bdd_airflow', read_only=True)
+        # fetchone permet de récup la valeur de nbr_rows et [0] car c'est un tuple : (22043,) et on veut la 1ere valeur
+        nbr_rows = conn.sql(f"SELECT COUNT(*) FROM bdd_airflow.main.openskynetwork_brute").fetchone()[0]
+    finally:
+        if conn:
+            conn.close()   
+    print(f"Nombre de lignes: {nbr_rows}")
+
+@task
+def check_duplicates():
+    conn = None
+    nbr_dupli = 0
+    try:
+        conn = duckdb.connect('dags/data/bdd_airflow', read_only=True)
+        nbr_dupli = conn.sql("""
+        SELECT callsign, time_position, last_contact, count(*) as cnt
+        FROM bdd_airflow.main.openskynetwork_brute
+        GROUP BY 1,2,3
+        HAVING cnt > 1;                 
+        """).count(column='cnt').fetchone()[0]
+    finally:
+        if conn:
+            conn.close()   
+    print(f"Nombre de duplications: {nbr_dupli}")
+
 @dag()
 def flights_pipeline():
     (
         EmptyOperator(task_id="start")
         >> get_flight_data(COL_OPEN_SKY, URL_ALL_STATES, CREDS_OPEN_SKY, DATA_FILE_NAME)
         >> load_from_file(DATA_FILE_NAME)
+        # [] pour tâches en parallèles
+        >> [check_row_numbers(), check_duplicates()]
         >> EmptyOperator(task_id="end")
         # >> = hiérarchie entre les taches (ici end doit s'exec après start)
     )
