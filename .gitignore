@@ -6,3 +6,4 @@ videos/
 __pycache__
 dags/data/bdd_airflow
 dags/data/data.json
+dags/data/data.json
