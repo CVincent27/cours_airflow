@@ -43,12 +43,44 @@ def load_from_file(data_file_name):
       if conn:
          conn.close()
 
+
+@task()
+def check_row_number():
+   conn = None
+   nbr_rows = 0
+   try:
+      conn = duckdb.connect('dags/data/bdd_airflow', read_only=True)
+      result = conn.execute("SELECT COUNT(*) FROM bdd_airflow.main.openskynetwork_brute")
+      nbr_rows = result.fetchone()[0]
+   finally:
+      if conn:
+         conn.close()
+   print(f"Nombre de lignes dans la table : {nbr_rows}")
+
+@task()
+def check_duplicates():
+   conn = None
+   nbr_duplicates = 0
+   try:
+      conn = duckdb.connect('dags/data/bdd_airflow', read_only=True)
+      nbr_duplicates = conn.sql("""
+      SELECT callsign, time_position, last_contact, count(*) AS cnt
+      FROM bdd_airflow.main.openskynetwork_brute
+      GROUP BY 1,2,3 
+      HAVING cnt > 1
+      """).count(column="cnt").fetchone()[0]
+   finally:
+      if conn:
+         conn.close()
+   print(f"Nombre de doublons dans la table : {nbr_duplicates}")
+
 @dag()
 def flights_pipeline():
     (
         EmptyOperator(task_id="start")
         >> get_flight_data(COLONNES_OPEN_SKY, URL_ALL_STATES, CREDENTIALS, DATA_FILE_NAME)
         >> load_from_file(DATA_FILE_NAME)
+        >> [check_row_number(), check_duplicates()]
         >> EmptyOperator(task_id="end")
     )
  
