@@ -1,3 +1,6 @@
+
+![DAG](https://github.com/user-attachments/assets/31ff1cd7-24fa-4fbc-85ca-b80800875cad)
+
 Une fois Docker et Docker-compose installés, ouvrez un terminal, naviguez vers le dossier
 où ce _repo_ est stocké et lancez éxécutez la commande
 ```shell
